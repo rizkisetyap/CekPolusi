@@ -6,16 +6,21 @@ import searchIcon from "../assets/images/search.svg";
 export const Home = () => {
 	return (
 		<div className={cn(style.home__main, "h-screen w-screen")}>
-			<div className="grid items-center grid-cols-1 md:grid-cols-2">
-				<div className="p-16">
-					<h1 className="text-6xl mb-7 font-semibold text-white">
-						Seberapa
-						<br />
-						Sehat
-						<br />
-						Ruanganmu
-					</h1>
-					<p className="text-[#8B8E99]">
+			<div className="grid items-center grid-cols-1 lg:grid-cols-2">
+				<div className="p-8 lg:p-16">
+					<div className="grid grid-cols-3 justify-between lg:block">
+						<h1 className="text-3xl col-span-2 lg:text-6xl mb-7 font-semibold text-white">
+							Seberapa
+							<br />
+							Sehat
+							<br />
+							Ruanganmu
+						</h1>
+						<div className="text-right">
+							<img src={img} className="w-[110px] object-cover lg:block" />
+						</div>
+					</div>
+					<p className="text-[#8B8E99] lg:text-base text-sm">
 						Find the best, reliable, and cheap smart watches here. We focus on product quality. Here you can find
 						smart watches of almost all brands. So why you are waiting? Just order now!
 					</p>
@@ -35,7 +40,7 @@ export const Home = () => {
 					</div>
 				</div>
 				<div className="flex justify-center items-center">
-					<img src={img} className="w-[388px]" />
+					<img src={img} className="w-[388px] hidden lg:block" />
 				</div>
 			</div>
 		</div>
