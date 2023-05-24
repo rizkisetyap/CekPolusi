@@ -17,7 +17,7 @@ export const Home = () => {
 							Ruanganmu
 						</h1>
 						<div className="text-right">
-							<img src={img} className="w-[110px] object-cover lg:block" />
+							<img src={img} className="w-[110px] object-cover lg:none" />
 						</div>
 					</div>
 					<p className="text-[#8B8E99] lg:text-base text-sm">
