@@ -5,7 +5,7 @@ import searchIcon from "../assets/images/search.svg";
 
 export const Home = () => {
 	return (
-		<div className={cn(style.home__main, "h-screen w-screen")}>
+		<div className={cn(style.home__main, "h-screen w-screen overflow-x-hidden")}>
 			<div className="grid items-center grid-cols-1 lg:grid-cols-2">
 				<div className="p-6 md:p-8 lg:p-16">
 					<div className="grid grid-cols-3 md:items-center md:grid-cols-2 md:justify-between justify-between lg:block">
