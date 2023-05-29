@@ -1,30 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DefaultMap from "../components/DefaultMap";
 import MainChart from "../components/MainChart";
 import s from "../css/home.module.css";
 import Layout from "../components/Layout";
-const Dashboard = () => {
-	const [data, setData] = useState([...new Array(10).fill(0).map(() => getRandomArbitrary(100, 500))]);
+import { realtimeDB } from "../config/firebase";
+import { ref, onValue } from "firebase/database";
 
-	function randomize() {
-		setData([...new Array(10).fill(0).map(() => getRandomArbitrary(100, 500))]);
-	}
+const Dashboard = () => {
+	const [datas, setDatas] = useState<number[]>([]);
+	const [n, setN] = useState(0);
+	// var n = 0;
+	useEffect(() => {
+		const q = ref(realtimeDB, "Sensor");
+		return onValue(q, (snapshot) => {
+			const data = snapshot.val();
+
+			if (datas.length <= 30) {
+				let newArray = [...datas];
+				newArray = [data.RawData, ...newArray];
+				setDatas(newArray);
+			} else {
+				let newArray = [...datas];
+				newArray.pop();
+				setDatas(newArray);
+			}
+			console.log(datas);
+			setN((n) => n + 1);
+		});
+	}, [n]);
+	// console.log(datas);
 	return (
 		<Layout>
 			<div className={s.home__main + " w-screen h-screen"}>
 				<div className="p-4">
 					<div className="mb-6">
 						<h1 className="text-white text-4xl font-semibold mb-4">Dashboard</h1>
-						<button onClick={randomize} className="outline-none px-4 py-1 bg-[#3858D6] text-white rounded-sm">
-							Randomize
-						</button>
+						<button className="outline-none px-4 py-1 bg-[#3858D6] text-white rounded-sm">Randomize</button>
 					</div>
 					<div className="grid grid-cols-1 lg:grid-cols-2 items-stretch lg:gap-4">
 						<div className="col-span-1">
 							<DefaultMap />
 						</div>
 						<div className="bg-white">
-							<MainChart ds={data} />
+							<MainChart ds={datas} />
 						</div>
 					</div>
 				</div>
@@ -32,7 +50,5 @@ const Dashboard = () => {
 		</Layout>
 	);
 };
-function getRandomArbitrary(min: number, max: number) {
-	return Math.random() * (max - min) + min;
-}
+
 export default Dashboard;
