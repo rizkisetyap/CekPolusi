@@ -9,43 +9,32 @@ import {
 	PointElement,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
+import moment from "moment";
+import "moment/locale/id";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-export const options = {
-	responsive: true,
-	plugins: {
-		legend: {
-			position: "top" as const,
-		},
-		title: {
-			display: true,
-			text: "Chart.js Bar Chart",
-		},
-	},
-	options: {
-		elements: {
-			point: {
-				radius: 0,
-			},
-		},
-	},
-};
+
 // const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
-const MainChart: React.FC<{ ds: any }> = (prop) => {
+const MainChart: React.FC<{ ds: any; labels: any; date: any }> = (prop) => {
 	const chartContainerRef = useRef(null);
-
-	const data = {
-		labels: [...new Array(30).fill(0)],
-		datasets: [
-			{
-				label: "Datasets 1",
-				data: prop.ds,
-				backgroundColor: "rgba(53, 162, 235, 0.5)",
+	const options = {
+		responsive: true,
+		plugins: {
+			legend: {
+				position: "top" as const,
 			},
-		],
+			title: {
+				display: true,
+				text: "Last Update " + moment(prop.date).format("dddd, DD MMMM YYYY - H:mm:ss"),
+			},
+		},
 	};
-	useEffect(() => {}, []);
+	const data = {
+		labels: prop.labels,
+		datasets: prop.ds,
+	};
+	// console.log(prop.ds);
 	return <Line ref={chartContainerRef} options={options} data={data} />;
 };
 
