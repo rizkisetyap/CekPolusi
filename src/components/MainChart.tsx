@@ -20,6 +20,13 @@ const MainChart: React.FC<{ ds: any; labels: any; date: any }> = (prop) => {
 	const chartContainerRef = useRef(null);
 	const options = {
 		responsive: true,
+		scales: {
+			y: {
+				ticks: {
+					stepSize: 0.01, // Set the tick step (interval) to 10
+				},
+			},
+		},
 		plugins: {
 			legend: {
 				position: "top" as const,
