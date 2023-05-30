@@ -20,13 +20,15 @@ const initialDatasets: IDataSets = {
 	data: [],
 	backgroundColor: "rgba(53, 162, 235, 0.5)",
 	pointRadius: 2,
-	tension: 0.1,
+	tension: 0.3,
 	borderColor: "rgba(53, 162, 235, 0.5)",
 };
 const Dashboard = () => {
 	const [labels, setLabels] = useState<string[]>([]);
 	const [time, setTime] = useState(Date.now());
 	const [n, setN] = useState(0);
+	// const [r1, setR1] = useState(generateGaussianRandom(0.1, 0.1));
+	// const [r2, setR2] = useState(generateGaussianRandom(0.1, 0.1));
 	///
 	const [datasetsRaw, setDatasetsRaw] = useState<IDataSets>({
 		...initialDatasets,
@@ -49,20 +51,20 @@ const Dashboard = () => {
 	const [datasetco2, setDatasetco2] = useState<IDataSets>({
 		...initialDatasets,
 		label: "Dataset CO2",
-		backgroundColor: "rgba(255,230,170,0.5)",
-		borderColor: "rgba(255,230,170,0.5)",
+		backgroundColor: "rgba(255,230,170,0.9)",
+		borderColor: "rgba(255,230,170,0.9)",
 	});
 	// var n = 0;
 	useEffect(() => {
 		const q = ref(realtimeDB, "Sensor");
 		return onValue(q, (snapshot) => {
 			const data = snapshot.val();
-			const alkohol = data.ALCOHOL + Math.random() * (631 - 625 + 1) + 625;
-			const co2 = data.CO2 + Math.random() * (250 - 230 + 1) + 230;
-			const nh4 = data.NH4 + Math.random() * (640 - 620 + 1) + 620;
+			const alkohol = data.ALCOHOL;
+			const co2 = data.CO2;
+			const nh4 = data.NH4;
 			const label = moment(Date.now()).format("H:mm:ss");
-			let rawData = data.RawData + Math.random() * (20 - 3 + 1) + 3;
-			if (datasetsRaw.data.length >= 10) {
+			let rawData = data.RawData;
+			if (datasetsRaw.data.length >= 30) {
 				const newArray = [...datasetsRaw.data];
 				const newAlkohol = [...datasetAlcohol.data];
 				const newNH4 = [...datasetnh4.data];
@@ -70,15 +72,15 @@ const Dashboard = () => {
 				const newLabels = [...labels];
 				newLabels.unshift(label);
 
-				newArray.pop();
-				newAlkohol.pop();
-				newNH4.pop();
-				newCO2.pop();
-
 				newArray.unshift(rawData);
 				newAlkohol.unshift(alkohol);
 				newNH4.unshift(nh4);
 				newCO2.unshift(co2);
+
+				newArray.pop();
+				newAlkohol.pop();
+				newNH4.pop();
+				newCO2.pop();
 
 				newLabels.pop();
 
@@ -108,26 +110,29 @@ const Dashboard = () => {
 				setDatasetco2((p) => ({ ...p, data: newCO2 }));
 			}
 			setTime(Date.now());
-			setTimeout(() => setN((n) => n + 1), 2000);
+			// setR1(generateGaussianRandom(0.1, 0.1));
+			// setR2(generateGaussianRandom(0.1, 0.1));
+			setTimeout(() => setN((n) => n + 1), 100);
 		});
 	}, [n]);
-	// console.log(datas);
 	return (
 		<Layout>
 			<div className={s.home__main + " w-screen h-screen"}>
 				<div className="p-4">
 					<div className="mb-6">
-						<h1 className="text-white text-4xl font-semibold mb-4">Dashboard</h1>
-						<button className="outline-none px-4 py-1 bg-[#3858D6] text-white rounded-sm">Randomize</button>
+						<h1 className="text-white text-4xl font-semibold mb-1">Dashboard</h1>
+
+						<p className="text-gray-200">Output sensor MQ-135</p>
+						{/* <button className="outline-none px-4 py-1 bg-[#3858D6] text-white rounded-sm">Randomize</button> */}
 					</div>
-					<div className="grid grid-cols-1 lg:grid-cols-2 items-stretch lg:gap-4">
-						<div className="col-span-1">
+					<div className="grid grid-cols-1 lg:grid-cols-1 items-stretch lg:gap-4">
+						<div className="col-span-1 hidden">
 							<DefaultMap />
 						</div>
 						<div className="bg-white">
 							<MainChart
 								date={time}
-								ds={[datasetsRaw, datasetco2, datasetAlcohol, datasetnh4]}
+								ds={[datasetAlcohol, datasetnh4, datasetco2, datasetsRaw]}
 								labels={labels}
 							/>
 						</div>
@@ -139,3 +144,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+// Media Komunikasi (RTR)
